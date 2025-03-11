@@ -18,6 +18,24 @@ function addListeners() {
             const block = document.getElementById('scaleBlock');
             scale(block, 1000, 1.25);
         });
+
+    document.getElementById('moveAndHidePlay')
+      .addEventListener('click', function () {
+        const block = document.getElementById('moveAndHideBlock');
+        moveAndHide(block, 5000);
+      });
+
+  document.getElementById('showAndHidePlay')
+    .addEventListener('click', function () {
+      const block = document.getElementById('showAndHideBlock');
+      showAndHide(block, 5000);
+    });
+
+  document.getElementById('heartBeatingPlay')
+    .addEventListener('click', function () {
+      const block = document.getElementById('heartBeatingBlock');
+      const beating = heartBeating(block);
+    });
 }
 
 function getTransform(translation, ratio) {
@@ -71,12 +89,49 @@ function animaster() {
     element.style.transform = getTransform(null, ratio);
   }
 
+  function moveAndHide(element, duration, translation) {
+    const moveDuration = duration * 2/ 5;
+    const fadeDuration = duration * 3/ 5;
+    move(element, moveDuration, {x: 100, y: 20});
+    setTimeout(() => {
+      fadeOut(element, fadeDuration);
+    }, moveDuration)
+  }
+
+  function showAndHide(element, duration) {
+    const partDuration = duration / 3;
+    fadeIn(element, partDuration);
+    setTimeout(() => {
+      fadeOut(element, partDuration);
+    }, partDuration * 2);
+  }
+
+  function heartBeating(element) {
+    scale(element, 500, 1.4);
+    setTimeout(() => {
+      scale(element, 500, 1);
+    }, 500);
+
+    const int = setInterval(() => {
+      scale(element, 500, 1.4);
+      setTimeout(() => {
+        scale(element, 500, 1);
+      }, 500);
+    }, 1000);
+
+    return {stop: () => clearInterval(int)}
+  }
+
   return {
-    fadeIn, move, scale
+    fadeIn, fadeOut, move, scale, moveAndHide, showAndHide, heartBeating
   };
 }
 
 const anim = animaster();
 const fadeIn = anim.fadeIn;
+const fadeOut = anim.fadeOut;
 const move = anim.move;
 const scale = anim.scale;
+const moveAndHide = anim.moveAndHide;
+const showAndHide = anim.showAndHide;
+const heartBeating = anim.heartBeating;
