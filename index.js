@@ -102,8 +102,7 @@ function animaster() {
    * @param translation — объект с полями x и y, обозначающими смещение блока
    */
   function move(element, duration, translation) {
-    element.style.transitionDuration = `${duration}ms`;
-    element.style.transform = getTransform(translation, null);
+    return animaster().addMove(duration, translation).play(element);
   }
 
   /**
@@ -168,13 +167,14 @@ function animaster() {
       return this;
   }
 
-  function play() {
+  function play(element) {
       let delay = 0;
       for (const step of this._steps) {
           switch (step.type) {
               case 'move':
                   setTimeout(() => {
-                      move(element, step.duration, step.translation);
+                    element.style.transitionDuration = `${step.duration}ms`;
+                    element.style.transform = getTransform(step.translation, null);
                   }, delay);
                   break;
               case 'fadeIn':
