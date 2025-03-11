@@ -34,8 +34,15 @@ function addListeners() {
   document.getElementById('heartBeatingPlay')
     .addEventListener('click', function () {
       const block = document.getElementById('heartBeatingBlock');
-      const beating = heartBeating(block);
+      heartBeatingAnimation = heartBeating(block);
     });
+
+  document.getElementById('heartBeatingStop')
+    .addEventListener('click', function () {
+      if (heartBeatingAnimation) {
+        heartBeatingAnimation.stop();
+      }
+    })
 }
 
 function getTransform(translation, ratio) {
@@ -135,3 +142,5 @@ const scale = anim.scale;
 const moveAndHide = anim.moveAndHide;
 const showAndHide = anim.showAndHide;
 const heartBeating = anim.heartBeating;
+
+let heartBeatingAnimation;
