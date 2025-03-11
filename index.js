@@ -22,8 +22,14 @@ function addListeners() {
     document.getElementById('moveAndHidePlay')
       .addEventListener('click', function () {
         const block = document.getElementById('moveAndHideBlock');
-        moveAndHide(block, 5000);
+        moveAndHideAnimation = moveAndHide(block, 5000);
       });
+
+    document.getElementById('moveAndHideReset')
+      .addEventListener('click', function () {
+        if (moveAndHideAnimation && moveAndHideAnimation.reset)
+          moveAndHideAnimation.reset();
+      })
 
   document.getElementById('showAndHidePlay')
     .addEventListener('click', function () {
@@ -111,16 +117,25 @@ function animaster() {
     element.style.transform = getTransform(null, ratio);
   }
 
-  function moveAndHide(element, duration, translation) {
+  function moveAndHide(element, duration) {
     const moveDuration = duration * 2/ 5;
     const fadeDuration = duration * 3/ 5;
     move(element, moveDuration, {x: 100, y: 20});
-    setTimeout(() => {
+    const fadeTimeout = setTimeout(() => {
       fadeOut(element, fadeDuration);
     }, moveDuration)
+
+    return {
+      reset() {
+        clearTimeout(fadeTimeout);
+        resetMoveAndScale(element);
+        resetFadeOut(element);
+      }
+    }
   }
 
   function showAndHide(element, duration) {
+    element.classList.remove('show');
     const partDuration = duration / 3;
     fadeIn(element, partDuration);
     setTimeout(() => {
@@ -159,3 +174,4 @@ const showAndHide = anim.showAndHide;
 const heartBeating = anim.heartBeating;
 
 let heartBeatingAnimation;
+let moveAndHideAnimation;
