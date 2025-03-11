@@ -159,8 +159,42 @@ function animaster() {
     return {stop: () => clearInterval(int)}
   }
 
+  function addMove(duration, translation) {
+      this._steps.push({
+          type: 'move',
+          duration,
+          translation
+      });
+      return this;
+  }
+
+  function play() {
+      let delay = 0;
+      for (const step of this._steps) {
+          switch (step.type) {
+              case 'move':
+                  setTimeout(() => {
+                      move(element, step.duration, step.translation);
+                  }, delay);
+                  break;
+              case 'fadeIn':
+                  setTimeout(() => {
+                      fadeIn(element, step.duration);
+                  }, delay);
+                  break;
+              case 'fadeOut':
+                  setTimeout(() => {
+                      fadeOut(element, step.duration);
+                  }, delay);
+                  break;
+          }
+          delay += step.duration;
+      }
+  }
+
   return {
-    fadeIn, fadeOut, move, scale, moveAndHide, showAndHide, heartBeating
+      _steps: [],
+    fadeIn, fadeOut, move, scale, moveAndHide, showAndHide, heartBeating, addMove, play
   };
 }
 
